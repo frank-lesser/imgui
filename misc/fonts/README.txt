@@ -5,11 +5,12 @@ You may also load external .TTF/.OTF files.
 The files in this folder are suggested fonts, provided as a convenience.
 (Note: .OTF support in stb_truetype.h currently doesn't appear to load every font)
 
-Fonts are rasterized in a single texture at the time of calling either of io.Fonts.GetTexDataAsAlpha8()/GetTexDataAsRGBA32()/Build().
+Fonts are rasterized in a single texture at the time of calling either of io.Fonts->GetTexDataAsAlpha8()/GetTexDataAsRGBA32()/Build().
 Also read dear imgui FAQ in imgui.cpp!
 
 In this document:
 
+- Readme First / FAQ
 - Using Icons
 - Fonts Loading Instructions
 - FreeType rasterizer, Small font sizes
@@ -18,6 +19,16 @@ In this document:
 - Embedding Fonts in Source Code
 - Credits/Licences for fonts included in this folder
 - Links, Other fonts
+
+
+---------------------------------------
+ README FIRST / FAQ
+---------------------------------------
+
+ - You can use the style editor ImGui::ShowStyleEditor() to browse your fonts and understand what's going on if you have an issue.
+ - Make sure your font ranges data are persistent (available during the call to GetTexDataAsAlpha8()/GetTexDataAsRGBA32()/Build().
+ - Use C++11 u8"my text" syntax to encode literal strings as UTF-8. 
+ - If you want to include a backslash \ character in your string literal, you need to double them e.g. "folder\\filename".
 
 
 ---------------------------------------
@@ -49,8 +60,9 @@ In this document:
    io.Fonts->AddFontFromFileTTF("fonts/fontawesome-webfont.ttf", 13.0f, &config, icon_ranges);
 
    // Usage, e.g.
-   ImGui::Text("%s Search", ICON_FA_SEARCH);
-
+   ImGui::Button(ICON_FA_SEARCH " Search");                     // C string literals can be concatenated at compilation time, this is the same as "A" "B" becoming "AB"
+   ImGui::Text("%s among %d items", ICON_FA_SEARCH, count);
+   
  See Links below for other icons fonts and related tools.
 
 
@@ -81,7 +93,7 @@ In this document:
   - Mind the fact that some graphics drivers have texture size limitation.
   - Set io.Fonts.TexDesiredWidth to specify a texture width to minimize texture height (see comment in ImFontAtlas::Build function).
   - Set io.Fonts.Flags |= ImFontAtlasFlags_NoPowerOfTwoHeight; to disable rounding the texture height to the next power of two.
-  - You may reduce oversampling, e.g. config.OversampleH = 2 or 1.
+  - You may reduce oversampling, e.g. config.OversampleH = 1, this will largely reduce your textue size.
   - Reduce glyphs ranges, consider calculating them based on your source data if this is possible.
 
  Combine two fonts into one:
